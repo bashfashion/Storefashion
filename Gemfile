@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 # Bundle edge Rails instead: gem "rails", github: "rails/rails", branch: "main"
-gem "rails", "~> 8.1.2"
+gem "rails", "~> 8.1.3"
 # Use dotenv to manage environment variables in development and test
 gem "dotenv-rails"
 # The modern asset pipeline for Rails [https://github.com/rails/propshaft]
