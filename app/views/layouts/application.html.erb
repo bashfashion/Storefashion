@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Glowtechve" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="Store App">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+        <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Glowtechve">
+    <meta property="og:title" content="Glowtechve - Tienda Online">
+    <meta property="og:description" content="Productos electronicos al detal y al mayor">
+    <meta property="og:image" content="<%= asset_path('logostore.jpg') %>">
+    <meta property="og:image:alt" content="Logo de Glowtechve">
+
+    <%= yield :head %>
+
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="<%= asset_path('logostore.jpg') %>" type="image/jpeg">
+    <link rel="icon" href="<%= asset_path('logostore.jpg') %>" type="image/jpeg">
+    <link rel="apple-touch-icon" href="<%= asset_path('logostore.jpg') %>">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+  </head>
+
+  <script>
+    window.APP_CURRENCY = "<%= session[:currency] || "usd" %>";
+  </script>
+  <body>
+    <%= yield %>
+  </body>
+</html>

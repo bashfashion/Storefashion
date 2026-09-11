@@ -1,0 +1,214 @@
+<% selected_sale_type = params[:sale_type].presence || "Detal" %>
+<% selected_currency = session[:currency] || "usd" %>
+<div class="content-sticky">
+  <div class="admin-menu">
+    <%= image_tag "logotech.png", alt: "Logo", class: "store-logo" %>
+
+    <details class="menu-dropdown">
+      <summary>
+        AL <%= selected_sale_type.upcase %> <span>⌄</span>
+      </summary>
+
+      <div class="dropdown-options">
+        <%= link_to "AL MAYOR",
+            products_path(category_id: params[:category_id], sale_type: "Mayor"),
+            class: ("active-filter" if selected_sale_type == "Mayor") %>
+
+        <%= link_to "AL DETAL",
+            products_path(category_id: params[:category_id], sale_type: "Detal"),
+            class: ("active-filter" if selected_sale_type == "Detal") %>
+      </div>
+    </details>
+
+    <details class="menu-dropdown">
+      <summary>
+        <%= selected_currency == "bs" ? "BS" : "USD" %> <span>⌄</span>
+      </summary>
+
+      <div class="dropdown-options">
+        <button type="button" onclick="setCurrency('usd')">
+          USD
+        </button>
+
+        <button type="button" onclick="setCurrency('bs')">
+          BS
+        </button>
+      </div>
+    </details>
+  </div>
+
+  <div class="product-search">
+    <%= form_with url: products_path,
+        method: :get,
+        local: true,
+        id: "product-search-form" do |form| %>
+
+      <div class="search-wrapper">
+        <i class="ph ph-magnifying-glass search-icon"></i>
+
+        <%= form.search_field :q,
+            value: params[:q],
+            placeholder: "Buscar productos...",
+            class: "search-input",
+            id: "product-search-input",
+            autocomplete: "off" %>
+      </div>
+
+      <%= hidden_field_tag :category_id, params[:category_id] if params[:category_id].present? %>
+      <%= hidden_field_tag :sale_type, params[:sale_type] if params[:sale_type].present? %>
+    <% end %>
+  </div>
+  <div class="flex-category">
+    <ul class="admin-categories-list">
+      <% Category.all.each do |category| %>
+        <li class="<%= 'active-filter' if params[:category_id].to_i == category.id %>">
+          <%= link_to category.name,
+              products_path(category_id: category.id, sale_type: params[:sale_type]), class: "category-link" %>
+        </li>
+      <% end %>
+    </ul>
+  </div>
+</div>
+<header>
+  <div id="slider">
+    <% Product.with_slider_images.limit(3).each do |slider_product| %>
+      <% slider_image = slider_product.slider_images.first %>
+      <% next unless slider_image %>
+
+      <div class="slide">
+        <%= image_tag slider_image, alt: slider_product.name %>
+      </div>
+    <% end %>
+  </div>
+</header>
+
+
+  <a href="/"><h1>PRODUCTOS DESTACADOS</h1></a>
+
+  <div class="products-grid">
+    <% if @products.empty? %>
+      <p>No se encontraron productos.</p>
+      <% else %>
+      <% @products.each do |product| %>
+
+        <div class="product-card product"
+          data-usd="<%= product.price_usd %>"
+          data-bs="<%= product.price_bs %>">
+
+          <% if product.image.attached? %>
+          <%= image_tag product.image, width: 200 %>
+          <% end %>
+
+          <h3><%= product.name %></h3>
+          <p>Tipo: <%= product.sale_type %></p>
+
+          <p><%= product.description %></p>
+
+          <% currency = session[:currency] || "usd" %>
+          <div class="line-price"> 
+            <p class="price">
+              <%= currency == "usd" ?
+              "$#{number_with_delimiter(product.price_usd, delimiter: ',')}" :
+              "Bs #{number_with_delimiter(product.price_bs, delimiter: ',')}" %>
+            </p>
+
+            <% if product.quantity > 0 %>
+
+            <%= button_to add_to_cart_path(product.id),
+                method: :post,
+                form: { data: { turbo_stream: true } },
+                class: "add-cart-button" do %>
+              <i class="ph ph-shopping-cart"></i>
+              <span>Agregar</span>
+            <% end %>
+
+            <% else %>
+
+            <p class="out-of-stock">Agotado</p>
+
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    <% end %>
+  </div>
+<div id="floating-cart" onclick="openCartSidebar()">
+  <i class="ph ph-shopping-cart"></i>
+  <span id="cart-count"><%= CartItem.where(session_id: current_Session).sum(:quantity) %></span>
+</div>
+<div id="cart-sidebar">
+  <div class="cart-header">
+    <div>
+      <i class="ph-light ph-handbag"></i>
+      <h2>Tu Carrito</h2>
+    </div>
+    <button onclick="closeCartSidebar()" class="close-btn">×</button>
+  </div>
+
+  <div id="cart-sidebar-content">
+    <div id="cart-items">
+      <%= render "cart/cart_items" %>
+    </div>
+  </div>
+</div>
+<footer class="site-footer">
+  <%= image_tag "logofooter.png", alt: "Glowtech Electronics", class: "footer-logo" %>
+<div>
+  <p class="payment-title">Social Shop</p>
+  <a href="https://www.instagram.com/glowtechve?igsi=cmJidzFtZDVtdWRi&utm_source=qr" target="_blank" rel="noopener" class="instagram-link">
+  <%= image_tag "instagram.png", alt: "Instagram" %>
+  </a>
+</div>
+<div> 
+  <p class="payment-title">Métodos de pago</p>
+
+  <div class="payment-methods">
+    <%= image_tag "visa.png", alt: "Visa" %>
+  </div>
+</div>
+<div>
+  <p>
+    Desarrollado por
+    <a href="https://luissanteliz.netlify.app" target="_blank" rel="noopener">
+      Louis Santeliz
+    </a>
+  </p>
+
+  <p class="copyright">
+    © 2026 Glowtech Electronics. Todos los derechos reservados.
+  </p>
+</div>
+</footer>
+
+<script>
+(() => {
+  window.openCartSidebar = function () {
+    document.getElementById("cart-sidebar").classList.add("open");
+    document.getElementById("floating-cart").classList.add("hidden");
+  };
+
+  window.closeCartSidebar = function () {
+    document.getElementById("cart-sidebar").classList.remove("open");
+    document.getElementById("floating-cart").classList.remove("hidden");
+  };
+
+  if (window.sliderInterval) {
+    clearInterval(window.sliderInterval);
+  }
+
+  const slider = document.getElementById("slider");
+  if (!slider) return;
+
+  const slides = slider.children.length;
+  if (slides <= 1) return;
+
+  let currentPosition = 0;
+
+  function slide() {
+    slider.style.transform = `translateX(${-100 * currentPosition / slides}%)`;
+    currentPosition = (currentPosition + 1) % slides;
+  }
+
+  window.sliderInterval = setInterval(slide, 5000);
+})();
+</script>

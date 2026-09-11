@@ -1,0 +1,13 @@
+<turbo-stream action="replace" target="cart-count">
+  <template>
+    <span id="cart-count">
+      <%= CartItem.where(session_id: current_Session).sum(:quantity) %>
+    </span>
+  </template>
+</turbo-stream>
+
+<turbo-stream action="replace" target="cart-items">
+  <template>
+    <%= render partial: "cart/cart_items", formats: [:html] %>
+  </template>
+</turbo-stream>

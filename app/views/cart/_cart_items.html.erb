@@ -1,0 +1,74 @@
+<!-- filepath: /home/louis39/projects/Store-App/Store-App/app/views/cart/_cart_items.html.erb -->
+<% currency = session[:currency] || "usd" %>
+<% total = 0 %>
+
+<div id="cart-items">
+  <% @items.each do |item| %>
+    <% product = item.product %>
+    <% price = currency == "bs" ? product.price_bs : product.price_usd %>
+    <% subtotal = price * item.quantity %>
+    <% total += subtotal %>
+
+    <div class="cart-item">
+      <div class="cart-product-image">
+        <% if product.image.attached? %>
+          <%= image_tag product.image, alt: product.name %>
+        <% end %>
+      </div>
+
+      <div class="cart-product-info">
+        <strong><%= product.name %></strong>
+
+        <p class="cart-unit-price">
+          <%= currency == "bs" ? "Bs" : "$" %><%= price %>
+          <small>c/u</small>
+        </p>
+        <div class="content-quantity">
+          <%= button_to "-", cart_decrease_path(item.id),
+              method: :post,
+              class: "qty-btn",
+              form: { data: { turbo_stream: true } } %>
+
+          <span class="qty-number"><%= item.quantity %></span>
+
+          <%= button_to "+", cart_increase_path(item.id),
+              method: :post,
+              class: "qty-btn",
+              form: { data: { turbo_stream: true } } %>
+
+          <%= button_to cart_remove_path(item.id),
+              method: :delete,
+              class: "delete-icon-btn",
+              form: { data: { turbo_stream: true } } do %>
+            <i class="ph ph-trash"></i>
+          <% end %>
+        </div>
+      </div>
+
+      <div class="cart-item-total">
+        <span>TOTAL</span>
+        <strong>
+          <%= currency == "bs" ? "Bs" : "$" %><%= subtotal %>
+        </strong>
+      </div>
+    </div>
+  <% end %>
+
+ <div class="content-button">
+    <div class="cart-subtotal">
+      <span>Subtotal</span>
+      <strong>
+        <%= currency == "bs" ? "Bs" : "$" %><%= total %>
+      </strong>
+    </div>
+
+    <% if @items.any? %>
+      <%= link_to "Proceder al pago", checkout_path,
+          class: "btn-store" %>
+    <% else %>
+      <button type="button" class="btn-store" disabled>
+        Proceder al pago
+      </button>
+    <% end %>
+  </div>
+</div>

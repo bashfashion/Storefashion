@@ -1,0 +1,14 @@
+<h1>Nueva categoría</h1>
+
+<%= form_with model: @category, url: "/admin/categories", html: { class: "category-form" } do |form| %>
+
+  <div>
+    <%= form.label :name, "Nombre de la categoría" %>
+    <%= form.text_field :name %>
+  </div>
+
+  <%= form.submit "Crear categoría" %>
+
+<% end %>
+
+<%= link_to "Volver al inicio", "/admin", class: "back-link" %>

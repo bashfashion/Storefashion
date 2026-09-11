@@ -1,0 +1,17 @@
+<h1>Categorías</h1>
+
+<%= link_to "Nueva categoría", "/admin/categories/new" %>
+
+<ul>
+  <% @categories.each do |category| %>
+    <li>
+      <%= category.name %>
+
+      <%= button_to "Eliminar",
+          delete_category_path(category),
+          method: :delete,
+          data: { turbo_confirm: "¿Estas seguro de eliminar la categoría? puede tener productos asociados" } %>
+    </li>
+  <% end %>
+</ul>
+<%= link_to "Volver al inicio", "/admin" %>

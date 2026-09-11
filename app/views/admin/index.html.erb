@@ -1,0 +1,64 @@
+<a href="/admin"><h1>Panel Admin</h1></a>
+
+<div class="admin-menu">
+  <div> 
+    <%= link_to "Al Detal",
+    admin_path(category_id: params[:category_id], sale_type: "Detal"),
+    class: ("active-filter" if params[:sale_type] == "Detal") %>
+
+    <%= link_to "Al Mayor",
+    admin_path(category_id: params[:category_id], sale_type: "Mayor"),
+    class: ("active-filter" if params[:sale_type] == "Mayor") %>
+  </div>
+  <div> 
+    <a href="/admin/new"> Nuevo Producto</a>
+    <a href="/admin/categories">📂 Categorías</a>
+  </div>
+</div>
+
+<div class="rate-box">
+  <h3>Tasa del día</h3>
+
+  <%= form_with url: update_rate_path, method: :patch, local: true do %>
+    <input type="number" step="0.01" name="rate" value="<%= Setting.current.rate %>">
+    <button type="submit">Actualizar</button>
+  <% end %>
+</div>
+<div class="flex-category">
+  <ul class="admin-categories-list">
+    <% Category.all.each do |category| %>
+      <li class="<%= 'active-filter' if params[:category_id].to_i == category.id %>">
+        <%= link_to category.name,
+            admin_path(category_id: category.id, sale_type: params[:sale_type]), class: "category-link" %>
+      </li>
+    <% end %>
+  </ul>
+</div>
+
+<div class="products-grid">
+
+  <% @products.each do |product| %>
+
+  <div class="product-card">
+
+    <%= image_tag product.image if product.image.attached? %>
+
+    <h3><%= product.name %></h3>
+    <p>Tipo: <%= product.sale_type %></p>
+
+    <p>Stock: <%= product.quantity %></p>
+
+    <p>$<%= number_with_delimiter(product.price_usd, delimiter: ",") %></p>
+
+    <a href="/admin/edit/<%= product.id %>">✏️ Editar</a>
+
+    <%= button_to "🗑 Eliminar",
+    "/admin/destroy/#{product.id}",
+    method: :delete,
+    data: { turbo_confirm: "¿Seguro que deseas eliminar este producto?" } %>
+
+  </div>
+
+  <% end %>
+
+</div>

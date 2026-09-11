@@ -1,0 +1,52 @@
+<h2>Agregar Nuevo Producto</h2>
+
+<%= form_with model: @product, url: "/admin/create", local: true do |f| %>
+
+<div>
+<%= f.label :name %>
+<%= f.text_field :name %>
+</div>
+
+<div>
+<%= f.label :description %>
+<%= f.text_area :description %>
+</div>
+
+<div>
+<%= f.label :price_usd %>
+<%= f.number_field :price_usd, step: "any" %>
+</div>
+
+<div>
+<%= f.label :price_bs %>
+<%= f.number_field :price_bs, step: "any" %>
+</div>
+
+<%= f.label :sale_type, "Tipo de venta" %>
+<%= f.select :sale_type, ["Detal", "Mayor"] %>
+
+<div>
+  <%= f.label :category_id, "Categoría del producto" %>
+  <%= f.collection_select :category_id, Category.all, :id, :name, prompt: "Seleccionar categoría" %>
+</div>
+
+<div>
+<%= f.label :quantity, "Stock disponible" %>
+<%= f.number_field :quantity %>
+</div>
+
+<div>
+<%= f.label :image %>
+<%= f.file_field :image %>
+</div>
+
+<div>
+  <%= f.label :slider_images, "Imágenes para el slider (máx. 4)" %>
+  <%= f.file_field :slider_images, multiple: true, accept: "image/*" %>
+</div>
+
+<%= f.submit "Crear Producto" %>
+<%= link_to "Cancel", "/admin" %>
+
+<% end %>
+<%= link_to "Volver al inicio", "/admin", class: "back-link" %>

@@ -1,0 +1,109 @@
+<div class="check-title"> 
+  <h2>Finalizar Pedido</h2>
+  <p>Completa los datos para enviar tu pedido</p>
+</div>
+<%= form_with url: send_order_path, method: :post, data: { turbo: false } do %>
+
+  <%= text_field_tag :name, nil, placeholder: "Nombre completo", required: true %>
+  <%= text_field_tag :cedula, nil, placeholder: "Cédula", required: true %>
+  <%= telephone_field_tag :phone, nil, placeholder: "Teléfono", required: true %>
+
+  <div>
+    <%= text_field_tag :address, nil, id: "address", placeholder: "Dirección", required: true %>
+    <button type="button" id="getLocation">Usar mi ubicación</button>
+  </div>
+
+  <h3>Tipo de entrega</h3>
+  <label><%= radio_button_tag :delivery, "Delivery ciudad", true, id: "delivery_city" %> Delivery dentro de la ciudad</label>
+  <label><%= radio_button_tag :delivery, "Envío nacional", false, id: "delivery_national" %> Envío nacional</label>
+
+  <div id="national-fields" style="display:none; margin-top:10px;">
+    <%= select_tag :agency, options_for_select(["MRW", "ZOOM"]), prompt: "Selecciona agencia de envío", required: false %>
+  </div>
+
+  <% currency = session[:currency] || "usd" %>
+
+  <h3>Método de pago</h3>
+  <% if currency == "bs" %>
+    <label><%= radio_button_tag :payment, "Pago móvil", true %> Pago móvil</label>
+  <% end %>
+  <label><%= radio_button_tag :payment, "Binance" %> Binance</label>
+  <label><%= radio_button_tag :payment, "Zelle" %> Zelle</label>
+  <label><%= radio_button_tag :payment, "Zinli" %> Zinli</label>
+  <label><%= radio_button_tag :payment, "Efectivo" %> Efectivo</label>
+
+  <%= submit_tag "Enviar pedido por WhatsApp" %>
+
+<%= link_to "Volver a la tienda", root_path, class: "btn-store" %>
+<% end %>
+
+<footer class="site-footer">
+  <%= image_tag "logofooter.png", alt: "Glowtech Electronics", class: "footer-logo" %>
+<div>
+  <p class="payment-title">Social Shop</p>
+  <a href="https://instagram.com/" target="_blank" rel="noopener" class="instagram-link">
+  <%= image_tag "instagram.png", alt: "Instagram" %>
+  </a>
+</div>
+<div> 
+  <p class="payment-title">Métodos de pago</p>
+
+  <div class="payment-methods">
+    <%= image_tag "visa.png", alt: "Visa" %>
+  </div>
+</div>
+<div>
+  <p>
+    Desarrollado por
+    <a href="https://luissanteliz.netlify.app" target="_blank" rel="noopener">
+      Louis Santeliz
+    </a>
+  </p>
+
+  <p class="copyright">
+    © 2026 Glowtech Electronics. Todos los derechos reservados.
+  </p>
+</div>
+</footer>
+
+<script>
+document.getElementById("getLocation").addEventListener("click", function() {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(function(position) {
+      const lat = position.coords.latitude;
+      const lng = position.coords.longitude;
+
+      const link = `https://www.google.com/maps?q=${lat},${lng}`;
+      document.getElementById("address").value = link;
+    });
+  } else {
+    alert("GPS no soportado");
+  }
+});
+
+document.addEventListener("turbo:load", function() {
+  const deliveryCity = document.getElementById("delivery_city");
+  const deliveryNational = document.getElementById("delivery_national");
+  const nationalFields = document.getElementById("national-fields");
+
+  if (!deliveryCity || !deliveryNational) return;
+
+  function toggleFields() {
+    if (deliveryNational.checked) {
+      nationalFields.style.display = "block";
+      document.querySelector("[name='cedula']").required = true;
+      document.querySelector("[name='agency']").required = true;
+    } else {
+      nationalFields.style.display = "none";
+      document.querySelector("[name='cedula']").required = false;
+      document.querySelector("[name='agency']").required = false;
+    }
+  }
+
+  // inicializar estado
+  toggleFields();
+
+  deliveryCity.addEventListener("change", toggleFields);
+  deliveryNational.addEventListener("change", toggleFields);
+});
+</script>
