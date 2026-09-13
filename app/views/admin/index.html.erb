@@ -2,17 +2,9 @@
 
 <div class="admin-menu">
   <div> 
-    <%= link_to "Al Detal",
-    admin_path(category_id: params[:category_id], sale_type: "Detal"),
-    class: ("active-filter" if params[:sale_type] == "Detal") %>
-
-    <%= link_to "Al Mayor",
-    admin_path(category_id: params[:category_id], sale_type: "Mayor"),
-    class: ("active-filter" if params[:sale_type] == "Mayor") %>
-  </div>
-  <div> 
     <a href="/admin/new"> Nuevo Producto</a>
     <a href="/admin/categories">📂 Categorías</a>
+    <a href="/admin/slider">🖼 Imágenes del banner</a>
   </div>
 </div>
 
@@ -50,7 +42,7 @@
 
     <p>$<%= number_with_delimiter(product.price_usd, delimiter: ",") %></p>
 
-    <a href="/admin/edit/<%= product.id %>">✏️ Editar</a>
+    <a class="btn-edit" href="/admin/edit/<%= product.id %>">✏️ Editar</a>
 
     <%= button_to "🗑 Eliminar",
     "/admin/destroy/#{product.id}",

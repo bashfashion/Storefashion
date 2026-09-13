@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Glowtechve" %></title>
+    <title><%= content_for(:title) || "bashfashion" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Store App">
@@ -11,20 +11,23 @@
 
         <!-- Open Graph / Social Media -->
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Glowtechve">
-    <meta property="og:title" content="Glowtechve - Tienda Online">
-    <meta property="og:description" content="Productos electronicos al detal y al mayor">
-    <meta property="og:image" content="<%= asset_path('logostore.jpg') %>">
-    <meta property="og:image:alt" content="Logo de Glowtechve">
+    <meta property="og:site_name" content="bashfashion">
+    <meta property="og:title" content="bashfashion - Tienda Online">
+    <meta property="og:description" content="Tienda online de bashfashion, donde puedes encontrar una amplia variedad de productos de moda y accesorios. Compra con facilidad y recibe tus productos en la comodidad de tu hogar.">
+    <meta property="og:image" content="<%= asset_path('logobash.png') %>">
+    <meta property="og:image:alt" content="Logo de bashfashion">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&display=swap" rel="stylesheet">
 
     <%= yield :head %>
 
     <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
     <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
 
-    <link rel="icon" href="<%= asset_path('logostore.jpg') %>" type="image/jpeg">
-    <link rel="icon" href="<%= asset_path('logostore.jpg') %>" type="image/jpeg">
-    <link rel="apple-touch-icon" href="<%= asset_path('logostore.jpg') %>">
+    <link rel="icon" href="<%= asset_path('logobash.png') %>" type="image/jpeg">
+    <link rel="icon" href="<%= asset_path('logobash.png') %>" type="image/jpeg">
+    <link rel="apple-touch-icon" href="<%= asset_path('logobash.png') %>">
 
     <%# Includes all stylesheet files in app/assets/stylesheets %>
     <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>

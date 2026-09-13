@@ -84,7 +84,7 @@ class CartController < ApplicationController
 
     if @items.empty?
       redirect_to cart_path, alert: "Tu carrito está vacío"
-      return
+      nil
     end
   end
 
@@ -151,7 +151,7 @@ class CartController < ApplicationController
     items.destroy_all
 
     redirect_to(
-      "https://wa.me/584245647331?text=#{encoded_message}",
+      "https://wa.me/584122154020?text=#{encoded_message}",
       allow_other_host: true
     )
   end

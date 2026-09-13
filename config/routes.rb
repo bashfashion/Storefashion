@@ -27,6 +27,11 @@ Rails.application.routes.draw do
   delete "/admin/categories/:id", to: "categories#destroy", as: :delete_category
   patch "/admin/update_rate", to: "admin#update_rate", as: :update_rate
 
+  get "/admin/slider", to: "slider#index", as: :slider_index
+  get "/admin/slider/new", to: "slider#new", as: :new_slider
+  post "/admin/slider", to: "slider#create", as: :slider
+  delete "/admin/slider/:image", to: "slider#destroy", as: :delete_slider_image
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

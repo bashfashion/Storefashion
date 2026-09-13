@@ -1,24 +1,7 @@
-<% selected_sale_type = params[:sale_type].presence || "Detal" %>
 <% selected_currency = session[:currency] || "usd" %>
 <div class="content-sticky">
   <div class="admin-menu">
-    <%= image_tag "logotech.png", alt: "Logo", class: "store-logo" %>
-
-    <details class="menu-dropdown">
-      <summary>
-        AL <%= selected_sale_type.upcase %> <span>⌄</span>
-      </summary>
-
-      <div class="dropdown-options">
-        <%= link_to "AL MAYOR",
-            products_path(category_id: params[:category_id], sale_type: "Mayor"),
-            class: ("active-filter" if selected_sale_type == "Mayor") %>
-
-        <%= link_to "AL DETAL",
-            products_path(category_id: params[:category_id], sale_type: "Detal"),
-            class: ("active-filter" if selected_sale_type == "Detal") %>
-      </div>
-    </details>
+    <%= image_tag "logobash.png", alt: "Logo", class: "store-logo" %>
 
     <details class="menu-dropdown">
       <summary>
@@ -60,24 +43,35 @@
   </div>
   <div class="flex-category">
     <ul class="admin-categories-list">
+      <li class="<%= 'active-filter' if params[:category_id].blank? && params[:sale_type].blank? %>">
+        <%= link_to "Todos", products_path, class: "category-link" %>
+      </li>
+
       <% Category.all.each do |category| %>
         <li class="<%= 'active-filter' if params[:category_id].to_i == category.id %>">
           <%= link_to category.name,
-              products_path(category_id: category.id, sale_type: params[:sale_type]), class: "category-link" %>
+              products_path(category_id: category.id),
+              class: "category-link" %>
         </li>
       <% end %>
     </ul>
   </div>
 </div>
+
+<% setting = Setting.current %>
 <header>
   <div id="slider">
-    <% Product.with_slider_images.limit(3).each do |slider_product| %>
-      <% slider_image = slider_product.slider_images.first %>
-      <% next unless slider_image %>
+    <% [
+      ["banner_1", setting.banner_1],
+      ["banner_2", setting.banner_2],
+      ["banner_3", setting.banner_3]
+    ].each do |name, image| %>
 
-      <div class="slide">
-        <%= image_tag slider_image, alt: slider_product.name %>
-      </div>
+      <% if image.attached? %>
+        <div class="slide">
+          <%= image_tag image, alt: "Imagen destacada #{name}" %>
+        </div>
+      <% end %>
     <% end %>
   </div>
 </header>
@@ -100,7 +94,6 @@
           <% end %>
 
           <h3><%= product.name %></h3>
-          <p>Tipo: <%= product.sale_type %></p>
 
           <p><%= product.description %></p>
 
@@ -152,63 +145,129 @@
   </div>
 </div>
 <footer class="site-footer">
-  <%= image_tag "logofooter.png", alt: "Glowtech Electronics", class: "footer-logo" %>
-<div>
-  <p class="payment-title">Social Shop</p>
-  <a href="https://www.instagram.com/glowtechve?igsi=cmJidzFtZDVtdWRi&utm_source=qr" target="_blank" rel="noopener" class="instagram-link">
-  <%= image_tag "instagram.png", alt: "Instagram" %>
-  </a>
-</div>
-<div> 
-  <p class="payment-title">Métodos de pago</p>
-
-  <div class="payment-methods">
-    <%= image_tag "visa.png", alt: "Visa" %>
-  </div>
-</div>
-<div>
-  <p>
-    Desarrollado por
-    <a href="https://luissanteliz.netlify.app" target="_blank" rel="noopener">
-      Louis Santeliz
+    <%= image_tag "logobash.png", alt: "Glowtech Electronics", class: "footer-logo" %>
+  <div>
+    <p class="payment-title">Social Shop</p>
+    <a href="https://www.instagram.com/glowtechve?igsi=cmJidzFtZDVtdWRi&utm_source=qr" target="_blank" rel="noopener" class="instagram-link">
+    <%= image_tag "instagram.png", alt: "Instagram" %>
     </a>
-  </p>
+  </div>
+  <div>
+    <p>
+      Desarrollado por
+      <a href="https://luissanteliz.netlify.app" target="_blank" rel="noopener">
+        Louis Santeliz
+      </a>
+    </p>
 
-  <p class="copyright">
-    © 2026 Glowtech Electronics. Todos los derechos reservados.
-  </p>
-</div>
+    <p class="copyright">
+      © 2026 Bash Fashion. Todos los derechos reservados.
+    </p>
+  </div>
 </footer>
 
 <script>
-(() => {
-  window.openCartSidebar = function () {
-    document.getElementById("cart-sidebar").classList.add("open");
-    document.getElementById("floating-cart").classList.add("hidden");
-  };
+  (() => {
+    window.openCartSidebar = function () {
+      document.getElementById("cart-sidebar").classList.add("open");
+      document.getElementById("floating-cart").classList.add("hidden");
+    };
 
-  window.closeCartSidebar = function () {
-    document.getElementById("cart-sidebar").classList.remove("open");
-    document.getElementById("floating-cart").classList.remove("hidden");
-  };
+    window.closeCartSidebar = function () {
+      document.getElementById("cart-sidebar").classList.remove("open");
+      document.getElementById("floating-cart").classList.remove("hidden");
+    };
 
   if (window.sliderInterval) {
     clearInterval(window.sliderInterval);
   }
 
   const slider = document.getElementById("slider");
-  if (!slider) return;
 
-  const slides = slider.children.length;
-  if (slides <= 1) return;
+  if (slider) {
+    const slides = slider.children.length;
 
-  let currentPosition = 0;
+    if (slides > 1) {
+      let currentPosition = 0;
+      let startX = 0;
+      let currentX = 0;
+      let isDragging = false;
 
-  function slide() {
-    slider.style.transform = `translateX(${-100 * currentPosition / slides}%)`;
-    currentPosition = (currentPosition + 1) % slides;
-  }
+      function updateSlider(animate = true) {
+        slider.style.transition = animate
+          ? "transform 0.7s ease-in-out"
+          : "none";
 
-  window.sliderInterval = setInterval(slide, 5000);
-})();
+        slider.style.transform =
+          `translateX(${-100 * currentPosition / slides}%)`;
+      }
+
+      function startAutoSlide() {
+        clearInterval(window.sliderInterval);
+
+        window.sliderInterval = setInterval(() => {
+          currentPosition = (currentPosition + 1) % slides;
+          updateSlider();
+        }, 5000);
+      }
+
+      slider.addEventListener("pointerdown", (event) => {
+        isDragging = true;
+        startX = event.clientX;
+        currentX = startX;
+
+        slider.setPointerCapture(event.pointerId);
+        slider.style.cursor = "grabbing";
+        slider.style.transition = "none";
+      });
+
+      slider.addEventListener("pointermove", (event) => {
+        if (!isDragging) return;
+
+        currentX = event.clientX;
+        const distance = currentX - startX;
+        const movement = (distance / slider.clientWidth) * 100;
+
+        slider.style.transform =
+          `translateX(calc(${-100 * currentPosition / slides}% + ${movement}px))`;
+      });
+
+      function finishSwipe(event) {
+        if (!isDragging) return;
+
+        isDragging = false;
+        slider.style.cursor = "grab";
+
+        const distance = currentX - startX;
+        const minimumSwipeDistance = 50;
+
+        if (Math.abs(distance) >= minimumSwipeDistance) {
+          if (distance < 0) {
+            currentPosition = (currentPosition + 1) % slides;
+          } else {
+            currentPosition = (currentPosition - 1 + slides) % slides;
+          }
+        }
+
+        updateSlider();
+        startAutoSlide();
+
+          if (event.pointerId !== undefined) {
+            slider.releasePointerCapture?.(event.pointerId);
+          }
+        }
+
+        slider.addEventListener("pointerup", finishSwipe);
+        slider.addEventListener("pointercancel", finishSwipe);
+        slider.addEventListener("pointerleave", (event) => {
+          if (isDragging && event.buttons === 1) {
+            finishSwipe(event);
+          }
+        });
+
+        updateSlider(false);
+        startAutoSlide();
+      }
+    }
+  })();
 </script>

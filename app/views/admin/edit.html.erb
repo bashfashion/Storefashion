@@ -42,11 +42,6 @@
     <%= f.file_field :image %>
   </div>
 
-  <div>
-    <%= f.label :slider_images, "Imágenes para el slider (máx. 4)" %>
-    <%= f.file_field :slider_images, multiple: true, accept: "image/*" %>
-  </div>
-
   <%= f.submit "Actualizar Producto" %>
 
 <% end %>

@@ -1,0 +1,34 @@
+<div class="banner-page">
+  <h1>Imágenes del banner</h1>
+
+  <%= link_to "Subir o actualizar imágenes",
+      new_slider_path,
+      class: "banner-action" %>
+
+  <div class="banner-images">
+    <% [
+      ["banner_1", @setting.banner_1],
+      ["banner_2", @setting.banner_2],
+      ["banner_3", @setting.banner_3]
+    ].each do |name, image| %>
+
+      <div class="banner-image">
+        <h2><%= name.humanize %></h2>
+
+        <% if image.attached? %>
+          <%= image_tag image, alt: "Imagen #{name}" %>
+
+          <%= button_to "Eliminar imagen",
+              delete_slider_image_path(name),
+              method: :delete,
+              data: { turbo_confirm: "¿Seguro que deseas eliminar esta imagen?" } %>
+        <% else %>
+          <p>No hay imagen cargada.</p>
+        <% end %>
+      </div>
+    <% end %>
+  </div>
+  <div class="back-to">
+    <%= link_to "Volver al inicio", admin_path %>
+  </div>
+</div>

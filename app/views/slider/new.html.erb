@@ -1,0 +1,27 @@
+<h1>Sube tus imágenes del banner aquí</h1>
+
+<%= form_with model: @setting,
+    url: slider_path,
+    method: :post,
+    local: true,
+    multipart: true do |f| %>
+
+  <div>
+    <%= f.label :banner_1, "Imagen del banner 1" %>
+    <%= f.file_field :banner_1, accept: "image/*" %>
+  </div>
+
+  <div>
+    <%= f.label :banner_2, "Imagen del banner 2" %>
+    <%= f.file_field :banner_2, accept: "image/*" %>
+  </div>
+
+  <div>
+    <%= f.label :banner_3, "Imagen del banner 3" %>
+    <%= f.file_field :banner_3, accept: "image/*" %>
+  </div>
+
+  <%= f.submit "Guardar imágenes" %>
+<% end %>
+
+<%= link_to "Volver a imágenes del banner", slider_index_path %>
