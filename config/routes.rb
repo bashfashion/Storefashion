@@ -32,6 +32,10 @@ Rails.application.routes.draw do
   post "/admin/slider", to: "slider#create", as: :slider
   delete "/admin/slider/:image", to: "slider#destroy", as: :delete_slider_image
 
+  delete "/admin/products/:product_id/images/:image_id",
+  to: "admin#destroy_product_image",
+  as: :delete_product_image
+
   # Define your application routes per the DSL in https://guides.rubyonrails.org/routing.html
 
   # Reveal health status on /up that returns 200 if the app boots with no exceptions, otherwise 500.

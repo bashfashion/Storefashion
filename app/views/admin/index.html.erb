@@ -1,8 +1,8 @@
 <a href="/admin"><h1>Panel Admin</h1></a>
 
 <div class="admin-menu">
-  <div> 
-    <a href="/admin/new"> Nuevo Producto</a>
+  <div class="admin-menu__actions">
+    <a href="/admin/new">Nuevo Producto</a>
     <a href="/admin/categories">📂 Categorías</a>
     <a href="/admin/slider">🖼 Imágenes del banner</a>
   </div>
@@ -33,7 +33,8 @@
 
   <div class="product-card">
 
-    <%= image_tag product.image if product.image.attached? %>
+    <% primary_image = product.slider_images.first || product.image %>
+    <%= image_tag primary_image if primary_image.present? %>
 
     <h3><%= product.name %></h3>
     <p>Tipo: <%= product.sale_type %></p>

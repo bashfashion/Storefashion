@@ -1,6 +1,6 @@
 <h2>Agregar Nuevo Producto</h2>
 
-<%= form_with model: @product, url: "/admin/create", local: true do |f| %>
+<%= form_with model: @product, url: "/admin/create", local: true, multipart: true do |f| %>
 
 <div>
 <%= f.label :name %>
@@ -22,9 +22,6 @@
 <%= f.number_field :price_bs, step: "any" %>
 </div>
 
-<%= f.label :sale_type, "Tipo de venta" %>
-<%= f.select :sale_type, ["Detal", "Mayor"] %>
-
 <div>
   <%= f.label :category_id, "Categoría del producto" %>
   <%= f.collection_select :category_id, Category.all, :id, :name, prompt: "Seleccionar categoría" %>
@@ -36,9 +33,43 @@
 </div>
 
 <div>
-<%= f.label :image %>
-<%= f.file_field :image %>
+  <%= f.label :slider_images, "Imagen principal" %>
+  <%= file_field_tag "product[slider_images][]",
+      accept: "image/*",
+      required: true %>
 </div>
+
+<div>
+  <%= label_tag "product_slider_image_2", "Imagen 2" %>
+  <%= file_field_tag "product[slider_images][]",
+      id: "product_slider_image_2",
+      accept: "image/*" %>
+</div>
+
+<div>
+  <%= label_tag "product_slider_image_3", "Imagen 3" %>
+  <%= file_field_tag "product[slider_images][]",
+      id: "product_slider_image_3",
+      accept: "image/*" %>
+</div>
+
+<div>
+  <%= label_tag "product_slider_image_4", "Imagen 4" %>
+  <%= file_field_tag "product[slider_images][]",
+      id: "product_slider_image_4",
+      accept: "image/*" %>
+</div>
+
+<div>
+  <%= label_tag "product_slider_image_5", "Imagen 5" %>
+  <%= file_field_tag "product[slider_images][]",
+      id: "product_slider_image_5",
+      accept: "image/*" %>
+</div>
+
+<small>
+  La primera imagen será la imagen principal. Puedes subir entre 1 y 5 imágenes.
+</small>
 
 <%= f.submit "Crear Producto" %>
 <%= link_to "Cancel", "/admin" %>

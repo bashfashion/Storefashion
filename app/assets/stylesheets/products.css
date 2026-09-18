@@ -3,19 +3,13 @@ body {
   font-family: "Playfair Display", serif;
   background-color: #FBF2F1;
 }
-/* header {
-  position: relative;
-  width: 100%;
-  aspect-ratio: 402 / 420;
-  overflow: hidden;
-} */
 
 /* ===== BANNER RESPONSIVE ===== */
 
 header {
   display: block;
   width: 100%;
-  aspect-ratio: 402 / 700;
+  aspect-ratio: 402 / 550;
   overflow: hidden;
   position: relative;
 }
@@ -359,13 +353,128 @@ background:#9a0c0c;
   to{opacity:1; transform:translateY(0)}
 }
 
-.admin-menu {
+.store-logo-and-currency {
   display: flex;
+  justify-content: center;
+  gap: 40px;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #FBF2F1;
+}
+
+.admin-menu {
+  margin: 1.5rem 0 2rem;
+}
+
+.admin-menu__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.admin-menu__actions a {
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 24px;
-  margin-top: 30px;
+  min-height: 46px;
+  padding: 0.8rem 1.2rem;
+  border-radius: 999px;
+  background: #842f2d;
+  color: #fff;
+  text-decoration: none;
+  font-weight: 600;
+  letter-spacing: 0.2px;
+  box-shadow: 0 8px 20px rgba(17, 24, 39, 0.18);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
 }
+
+.admin-menu__actions a:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 24px rgba(17, 24, 39, 0.22);
+}
+
+.admin-menu__actions a:active {
+  transform: translateY(0);
+}
+
+@media (max-width: 640px) {
+  .admin-menu__actions {
+    flex-direction: column;
+  }
+
+  .admin-menu__actions a {
+    width: 100%;
+  }
+}
+
+/* ======== slider-product admin ======== */
+.product-images-manager {
+  margin: 25px 0;
+}
+
+.product-images-manager h3 {
+  margin-bottom: 12px;
+}
+
+.product-thumbnails {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.product-thumbnail {
+  position: relative;
+  width: 150px;
+  padding: 8px;
+  border: 1px solid #e2d5d5;
+  border-radius: 6px;
+  background: #fff;
+}
+
+.product-thumbnail img {
+  display: block;
+  width: 100%;
+  height: 150px;
+  border-radius: 4px;
+  object-fit: cover;
+}
+
+.primary-image-label {
+  display: block;
+  margin: 7px 0;
+  color: #8c4b56;
+  font-size: 13px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.delete-image-button {
+  width: 100%;
+  margin-top: 8px;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 3px;
+  background: #a94442;
+  color: #fff;
+  cursor: pointer;
+  font-size: 13px;
+}
+
+.delete-image-button:hover {
+  background: #842f2d;
+}
+
+@media (max-width: 480px) {
+  .product-thumbnail {
+    width: calc(50% - 8px);
+  }
+
+  .product-thumbnail img {
+    height: 130px;
+  }
+}
+/*end*/
 
 .store-logo {
   width: 150px;
@@ -1091,10 +1200,6 @@ h2 {
     }
   }
 
-  .product-card img {
-    height: 200px; 
-  }
-
   #cart-sidebar {
     right: -100%;
     width: 500px;
@@ -1111,7 +1216,252 @@ h2 {
   width: 100%; 
 }
 
+/* ======== FASHION QUOTE ======== */
 
+.fashion-quote {
+  position: relative;
+  width: min(100% - 20px, 560px);
+  margin: 40px auto 0;
+  overflow: hidden;
+  border-radius: 4px;
+  isolation: isolate;
+  background: #332b28;
+}
+
+.fashion-quote__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.fashion-quote__overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: linear-gradient(
+    to top,
+    rgba(24, 18, 16, 0.94) 0%,
+    rgba(24, 18, 16, 0.72) 30%,
+    rgba(24, 18, 16, 0.18) 62%,
+    transparent 100%
+  );
+}
+
+.fashion-quote__content {
+  position: absolute;
+  right: 24px;
+  bottom: 24px;
+  left: 24px;
+  z-index: 2;
+  color: #fff;
+}
+
+.fashion-quote__title {
+  margin: 0 0 12px;
+  font-family: "Playfair Display", serif;
+  font-size: clamp(1.45rem, 5vw, 1.9rem);
+  font-style: italic;
+  line-height: 1.25;
+  color: #fff;
+}
+
+.fashion-quote__description {
+  max-width: 290px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.86);
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 0.78rem;
+  line-height: 1.55;
+}
+
+@media (min-width: 768px) {
+  .fashion-quote {
+    width: min(100% - 80px, 520px);
+    height: 430px;
+  }
+
+  .fashion-quote__content {
+    right: 32px;
+    bottom: 32px;
+    left: 32px;
+  }
+
+  .fashion-quote__title {
+    font-size: 2.25rem;
+  }
+
+  .fashion-quote__description {
+    font-size: 0.9rem;
+  }
+}
+
+/* ======== experiencia ======== */
+.bah-experience {
+  width: calc(100% - 16px);
+  max-width: 500px;
+  margin: 38px auto 0;
+  padding: 28px 24px 22px;
+  border-radius: 8px;
+  background: #fbf2f1;
+}
+
+.bah-experience h2 {
+  margin: 0;
+  color: #111;
+  text-align: center;
+  font-family: "Playfair Display", serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.bah-experience__intro {
+  max-width: 290px;
+  margin: 5px auto 20px;
+  color: #633e45;
+  text-align: center;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 0.78rem;
+  line-height: 1.4;
+}
+
+.bah-experience__items {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.bah-experience__item {
+  display: flex;
+  align-items: center;
+  min-height: 62px;
+  padding: 8px;
+  border-radius: 5px;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(80, 46, 46, 0.08);
+}
+
+.bah-experience__icon {
+  display: grid;
+  flex: 0 0 46px;
+  place-items: center;
+  width: 46px;
+  height: 46px;
+  margin-right: 16px;
+  border-radius: 11px;
+  color: #111;
+  font-size: 1.45rem;
+}
+
+.bah-experience__icon--pink {
+  background: #ffd9df;
+}
+
+.bah-experience__icon--beige {
+  background: #ebe0d5;
+}
+
+.bah-experience__item h3 {
+  margin: 0 0 2px;
+  color: #111;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 0.92rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.bah-experience__item p {
+  overflow: hidden;
+  margin: 0;
+  color: #765961;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 0.72rem;
+  line-height: 1.35;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bah-experience__text {
+  min-width: 0;
+  flex: 1;
+}
+
+.bah-experience__item--support {
+  padding-right: 8px;
+}
+
+.bah-experience__button {
+  flex: 0 0 auto;
+  margin-left: 10px;
+  padding: 9px 12px;
+  border-radius: 2px;
+  background: #914b58;
+  color: #fff;
+  font-family: "Plus Jakarta Sans", sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.2s ease;
+}
+
+.bah-experience__button:hover {
+  background: #713944;
+}
+
+@media (max-width: 370px) {
+  .bah-experience {
+    padding-right: 14px;
+    padding-left: 14px;
+  }
+
+  .bah-experience__icon {
+    margin-right: 10px;
+  }
+
+  .bah-experience__button {
+    margin-left: 6px;
+    padding-right: 9px;
+    padding-left: 9px;
+  }
+}
+
+/* ======== PRODUCT-GALLERY ======== */
+.product-gallery {
+  display: flex;
+  width: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  touch-action: pan-x;
+  overscroll-behavior-x: contain;
+}
+
+.product-gallery::-webkit-scrollbar {
+  display: none;
+}
+
+.product-gallery__slide {
+  flex: 0 0 100%;
+  width: 100%;
+  overflow: hidden;
+  scroll-snap-align: start;
+}
+
+.product-gallery__image {
+  display: block;
+  width: 100%;
+  height: 530px;
+  object-fit: cover;
+  user-select: none;
+  pointer-events: none;
+}
+
+@media (min-width: 768px) {
+  .product-gallery__image {
+    height: 280px;
+  }
+}
 /* ======== FOOTER ======== */
 .site-footer {
   display: flex;
@@ -1134,6 +1484,13 @@ h2 {
   height: auto;
 }
 
+.instagram-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+}
+
 .instagram-link img {
   padding-top: 20px;
   width: 70px;
@@ -1141,12 +1498,6 @@ h2 {
 
 .instagram-link i {
   font-size: 26px;
-}
-
-.site-footer p {
-  margin: 10px 0;
-  color: black;
-  font-family: "Playfair Display", serif;
 }
 
 .site-footer a {
@@ -1158,11 +1509,19 @@ h2 {
 
 .copyright {
   font-size: 13px;
-  color: #94a3b8;
+  color: #838c9a;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 .btn-edit {
   background-color: #8C4B56;
+}
+
+.social-title {
+  font-size: 1rem;
+  font-weight: 400;
+  margin-bottom: 8px;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 @media (min-width: 768px) {
@@ -1173,10 +1532,6 @@ h2 {
 
   .footer-logo {
     width: 160px;
-  }
-
-  .payment-methods img {
-    width: 150px;
   }
 }
 
@@ -1213,25 +1568,6 @@ h2 {
 
   .instagram-link img {
     width: 110px;
-    object-fit: contain;
-  }
-
-  .payment-title {
-    margin: 0;
-    font-size: 18px;
-    font-weight: 700;
-  }
-
-  .payment-methods {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    gap: 18px;
-  }
-
-  .payment-methods img {
-    width: 150px;
-    max-height: 45px;
     object-fit: contain;
   }
 

@@ -1,6 +1,6 @@
 <h2>Editar Producto</h2>
 
-<%= form_with model: @product, url: "/admin/update/#{@product.id}", method: :patch, local: true do |f| %>
+<%= form_with model: @product, url: "/admin/update/#{@product.id}", method: :patch, local: true, multipart: true do |f| %>
 
   <div>
     <%= f.label :name %>
@@ -23,11 +23,6 @@
   </div>
 
   <div>
-    <%= f.label :sale_type, "Tipo de venta" %>
-    <%= f.select :sale_type, ["Detal", "Mayor"] %>
-  </div>
-
-  <div>
     <%= f.label :category_id, "Categoría del producto" %>
     <%= f.collection_select :category_id, Category.all, :id, :name %>
   </div>
@@ -38,12 +33,42 @@
   </div>
 
   <div>
-    <%= f.label :image %>
-    <%= f.file_field :image %>
+    <%= f.label :slider_images, "Agregar imágenes al slider" %>
+    <%= f.file_field :slider_images,
+        multiple: true,
+        accept: "image/*" %>
+    <small>Se conservarán las imágenes actuales y se agregarán las nuevas.</small>
   </div>
 
   <%= f.submit "Actualizar Producto" %>
 
+<% end %>
+
+<% if @product.slider_images.attached? %>
+  <div class="product-images-manager">
+    <h3>Imágenes actuales</h3>
+
+    <div class="product-thumbnails">
+      <% @product.slider_images.each_with_index do |image, index| %>
+        <div class="product-thumbnail">
+          <%= image_tag image,
+              alt: "#{@product.name} imagen #{index + 1}" %>
+
+          <% if index.zero? %>
+            <span class="primary-image-label">Principal</span>
+          <% end %>
+
+          <%= button_to "Eliminar",
+              delete_product_image_path(@product, image),
+              method: :delete,
+              class: "delete-image-button",
+              data: {
+                turbo_confirm: "¿Seguro que deseas eliminar esta imagen?"
+              } %>
+        </div>
+      <% end %>
+    </div>
+  </div>
 <% end %>
 
 <%= link_to "Volver al inicio", "/admin", class: "back-link" %>
