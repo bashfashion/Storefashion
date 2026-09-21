@@ -9,7 +9,7 @@ body {
 header {
   display: block;
   width: 100%;
-  aspect-ratio: 402 / 550;
+  aspect-ratio: 402 / 480;
   overflow: hidden;
   position: relative;
 }
@@ -1452,7 +1452,7 @@ h2 {
 .product-gallery__image {
   display: block;
   width: 100%;
-  height: 530px;
+  height: 300px;
   object-fit: cover;
   user-select: none;
 }

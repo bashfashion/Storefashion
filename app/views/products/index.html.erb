@@ -358,4 +358,32 @@
       }
     }
   })();
+
+
+  (() => {
+    const galleries = document.querySelectorAll(".product-gallery");
+
+    galleries.forEach((gallery) => {
+      let startX = 0;
+      let startY = 0;
+
+      gallery.addEventListener("touchstart", (event) => {
+        const touch = event.touches[0];
+        startX = touch.clientX;
+        startY = touch.clientY;
+      }, { passive: true });
+
+      gallery.addEventListener("touchmove", (event) => {
+        const touch = event.touches[0];
+        const deltaX = Math.abs(touch.clientX - startX);
+        const deltaY = Math.abs(touch.clientY - startY);
+
+        if (deltaY > deltaX) {
+          return;
+        }
+
+        event.preventDefault();
+      }, { passive: false });
+    });
+  })();
 </script>
