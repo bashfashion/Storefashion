@@ -258,83 +258,91 @@
       document.getElementById("floating-cart").classList.remove("hidden");
     };
 
-  if (window.sliderInterval) {
-    clearInterval(window.sliderInterval);
-  }
+    if (window.sliderInterval) {
+      clearInterval(window.sliderInterval);
+    }
 
-  const slider = document.getElementById("slider");
+    const slider = document.getElementById("slider");
 
-  if (slider) {
-    const slides = slider.children.length;
+    if (slider) {
+      const slides = slider.children.length;
 
-    if (slides > 1) {
-      let currentPosition = 0;
-      let startX = 0;
-      let currentX = 0;
-      let isDragging = false;
+      if (slides > 1) {
+        let currentPosition = 0;
+        let startX = 0;
+        let startY = 0;
+        let currentX = 0;
+        let isDragging = false;
 
-      function updateSlider(animate = true) {
-        slider.style.transition = animate
-          ? "transform 0.7s ease-in-out"
-          : "none";
+        function updateSlider(animate = true) {
+          slider.style.transition = animate
+            ? "transform 0.7s ease-in-out"
+            : "none";
 
-        slider.style.transform =
-          `translateX(${-100 * currentPosition / slides}%)`;
-      }
-
-      function startAutoSlide() {
-        clearInterval(window.sliderInterval);
-
-        window.sliderInterval = setInterval(() => {
-          currentPosition = (currentPosition + 1) % slides;
-          updateSlider();
-        }, 5000);
-      }
-
-      slider.addEventListener("pointerdown", (event) => {
-        isDragging = true;
-        startX = event.clientX;
-        currentX = startX;
-
-        slider.setPointerCapture(event.pointerId);
-        slider.style.cursor = "grabbing";
-        slider.style.transition = "none";
-      });
-
-      slider.addEventListener("pointermove", (event) => {
-        if (!isDragging) return;
-
-        currentX = event.clientX;
-        const distance = currentX - startX;
-        const movement = (distance / slider.clientWidth) * 100;
-
-        slider.style.transform =
-          `translateX(calc(${-100 * currentPosition / slides}% + ${movement}px))`;
-      });
-
-      function finishSwipe(event) {
-        if (!isDragging) return;
-
-        isDragging = false;
-        slider.style.cursor = "grab";
-
-        const distance = currentX - startX;
-        const minimumSwipeDistance = 50;
-
-        if (Math.abs(distance) >= minimumSwipeDistance) {
-          if (distance < 0) {
-            currentPosition = (currentPosition + 1) % slides;
-          } else {
-            currentPosition = (currentPosition - 1 + slides) % slides;
-          }
+          slider.style.transform =
+            `translateX(${-100 * currentPosition / slides}%)`;
         }
 
-        updateSlider();
-        startAutoSlide();
+        function startAutoSlide() {
+          clearInterval(window.sliderInterval);
 
-          if (event.pointerId !== undefined) {
-            slider.releasePointerCapture?.(event.pointerId);
+          window.sliderInterval = setInterval(() => {
+            currentPosition = (currentPosition + 1) % slides;
+            updateSlider();
+          }, 5000);
+        }
+
+        slider.addEventListener("pointerdown", (event) => {
+          isDragging = true;
+          startX = event.clientX;
+          startY = event.clientY;
+          currentX = startX;
+
+          slider.style.cursor = "grabbing";
+          slider.style.transition = "none";
+        });
+
+        slider.addEventListener("pointermove", (event) => {
+          if (!isDragging) return;
+
+          const deltaX = event.clientX - startX;
+          const deltaY = event.clientY - startY;
+
+          // Si el gesto es vertical, dejamos que la página haga scroll
+          if (Math.abs(deltaY) > Math.abs(deltaX)) {
+            isDragging = false;
+            slider.style.cursor = "grab";
+            slider.style.transition = "transform 0.7s ease-in-out";
+            return;
           }
+
+          currentX = event.clientX;
+          const distance = currentX - startX;
+          const movement = (distance / slider.clientWidth) * 100;
+
+          slider.style.transform =
+            `translateX(calc(${-100 * currentPosition / slides}% + ${movement}px))`;
+        });
+
+        function finishSwipe(event) {
+          if (!isDragging) return;
+
+          isDragging = false;
+          slider.style.cursor = "grab";
+
+          const distance = currentX - startX;
+          const minimumSwipeDistance = 50;
+
+          if (Math.abs(distance) >= minimumSwipeDistance) {
+            if (distance < 0) {
+              currentPosition = (currentPosition + 1) % slides;
+            } else {
+              currentPosition = (currentPosition - 1 + slides) % slides;
+            }
+          }
+
+          updateSlider();
+          startAutoSlide();
         }
 
         slider.addEventListener("pointerup", finishSwipe);
