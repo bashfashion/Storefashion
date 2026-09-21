@@ -359,31 +359,47 @@
     }
   })();
 
-
   (() => {
     const galleries = document.querySelectorAll(".product-gallery");
 
     galleries.forEach((gallery) => {
+      let isDragging = false;
       let startX = 0;
-      let startY = 0;
+      let startScrollLeft = 0;
 
-      gallery.addEventListener("touchstart", (event) => {
-        const touch = event.touches[0];
-        startX = touch.clientX;
-        startY = touch.clientY;
-      }, { passive: true });
+      gallery.addEventListener("pointerdown", (event) => {
+        isDragging = true;
+        startX = event.clientX;
+        startScrollLeft = gallery.scrollLeft;
+        gallery.setPointerCapture(event.pointerId);
+      });
 
-      gallery.addEventListener("touchmove", (event) => {
-        const touch = event.touches[0];
-        const deltaX = Math.abs(touch.clientX - startX);
-        const deltaY = Math.abs(touch.clientY - startY);
+      gallery.addEventListener("pointermove", (event) => {
+        if (!isDragging) return;
 
-        if (deltaY > deltaX) {
-          return;
+        const deltaX = event.clientX - startX;
+        gallery.scrollLeft = startScrollLeft - deltaX;
+      });
+
+      const stopDragging = () => {
+        if (!isDragging) return;
+        isDragging = false;
+
+        const slides = [...gallery.children];
+        const index = Math.round(gallery.scrollLeft / gallery.clientWidth);
+        const target = slides[index];
+
+        if (target) {
+          gallery.scrollTo({
+            left: target.offsetLeft,
+            behavior: "smooth"
+          });
         }
+      };
 
-        event.preventDefault();
-      }, { passive: false });
+      gallery.addEventListener("pointerup", stopDragging);
+      gallery.addEventListener("pointercancel", stopDragging);
+      gallery.addEventListener("pointerleave", stopDragging);
     });
   })();
 </script>
