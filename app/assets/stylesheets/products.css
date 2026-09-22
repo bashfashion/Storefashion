@@ -1485,20 +1485,47 @@ h2 {
   height: auto;
 }
 
-.instagram-link {
+.social-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.social-title {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.social-icons {
   display: flex;
   align-items: center;
   gap: 10px;
-  text-decoration: none;
 }
 
-.instagram-link img {
-  padding-top: 20px;
-  width: 70px;
+.social-links a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #f5f5f5;
+  transition: transform 0.2s ease, opacity 0.2s ease;
 }
 
-.instagram-link i {
-  font-size: 26px;
+.social-links a:hover {
+  transform: translateY(-1px);
+  opacity: 0.9;
+}
+
+.social-links img {
+  width: 26px;
+  height: 26px;
+  object-fit: contain;
+  display: block;
 }
 
 .site-footer a {
