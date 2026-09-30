@@ -96,34 +96,34 @@
           <% end %>
 
          <div class="product-gallery-container">
-  <div class="product-gallery">
-    <% product_images.each do |image| %>
-      <div class="product-gallery__slide">
-        <%= image_tag image,
-            alt: product.name,
-            class: "product-gallery__image" %>
-      </div>
-    <% end %>
-  </div>
+          <div class="product-gallery">
+            <% product_images.each do |image| %>
+              <div class="product-gallery__slide">
+                <%= image_tag image,
+                    alt: product.name,
+                    class: "product-gallery__image" %>
+              </div>
+            <% end %>
+          </div>
 
-  <% if product_images.length > 1 %>
-    <button
-      type="button"
-      class="product-gallery__arrow product-gallery__arrow--prev"
-      data-gallery-direction="-1"
-      aria-label="Imagen anterior">
-      <i class="ph ph-caret-left" aria-hidden="true"></i>
-    </button>
+          <% if product_images.length > 1 %>
+            <button
+              type="button"
+              class="product-gallery__arrow product-gallery__arrow--prev"
+              data-gallery-direction="-1"
+              aria-label="Imagen anterior">
+              <i class="ph ph-caret-left" aria-hidden="true"></i>
+            </button>
 
-    <button
-      type="button"
-      class="product-gallery__arrow product-gallery__arrow--next"
-      data-gallery-direction="1"
-      aria-label="Imagen siguiente">
-      <i class="ph ph-caret-right" aria-hidden="true"></i>
-    </button>
-  <% end %>
-</div>
+            <button
+              type="button"
+              class="product-gallery__arrow product-gallery__arrow--next"
+              data-gallery-direction="1"
+              aria-label="Imagen siguiente">
+              <i class="ph ph-caret-right" aria-hidden="true"></i>
+            </button>
+          <% end %>
+        </div>
 
           <h3><%= product.name %></h3>
           <p><%= product.description %></p>
